@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dmq2aisvbqwft"]
+
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_rx7i3"]
+[ext_resource type="Texture2D" uid="uid://dpm1v18j7fw1k" path="res://Resources/Bullet-Hell-Assets/player.png" id="2_vinv0"]
+[ext_resource type="Script" path="res://Scripts/bullet_pool.gd" id="3_u8cxy"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_031ew"]
+radius = 14.0
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_rx7i3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_031ew")
+
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_vinv0")
+hframes = 3
+
+[node name="Bullets" type="Node" parent="."]
+script = ExtResource("3_u8cxy")
+
+[node name="BulletSpawn" type="Marker2D" parent="."]
+position = Vector2(0, 16)
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
