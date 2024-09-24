@@ -15,3 +15,9 @@ func _bullet_done():
 func _process(delta: float) -> void:
 	self.rotation += 0.5
 	move_and_slide()
+
+# when something hits the area2d associated with this bullet
+func _on_collider_body_entered(body: Node2D) -> void:
+	if body.is_in_group("Enemy"):
+		body.on_hit.emit(100)
+		bulletPool.reset_bullet(self)

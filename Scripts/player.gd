@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+class_name PlayerCharacter
+
 @export var speed: float = 75.0
 @onready var bulletPool: BulletPool = get_node("Bullets")
 @onready var bullets = get_node("Bullets")
@@ -7,20 +9,6 @@ extends CharacterBody2D
 
 # the direction we are facing
 var direction: Vector2 = Vector2(0, 1)
-
-# manual animation by changing the sprite frame based on the input direction
-func setup_animation_frame(inputDir: Vector2) -> void:
-	var sprite = get_node("Sprite")
-	if inputDir.x > 0:
-		sprite.frame = 1
-		sprite.flip_h = false
-	elif inputDir.x < 0:
-		sprite.frame = 1
-		sprite.flip_h = true
-	elif inputDir.y < 0:
-		sprite.frame = 2
-	elif inputDir.y > 0:
-		sprite.frame = 0
 		
 func _shoot_bullet(playerDir: Vector2, bulletSpeed: float = 100) -> void:
 	if Input.is_action_just_pressed("shoot"):
@@ -37,7 +25,7 @@ func _physics_process(delta: float) -> void:
 	).normalized()
 	
 	# setup the animation frame
-	setup_animation_frame(inputDirection)
+	SpriteUtils.setup_animation_frame(get_node("Sprite"), inputDirection)
 	
 	# change velocity
 	if inputDirection.x != 0:

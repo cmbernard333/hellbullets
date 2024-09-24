@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyType" load_steps=3 format=3 uid="uid://bs6chxa2pgtt7"]
+
+[ext_resource type="Script" path="res://Scripts/enemy_type.gd" id="1_qjfgx"]
+[ext_resource type="Texture2D" uid="uid://c7dqtlb7a01mw" path="res://Resources/Bullet-Hell-Assets/monster sprites/guardian_serpent_old.png" id="2_mbxj3"]
+
+[resource]
+script = ExtResource("1_qjfgx")
+texture = ExtResource("2_mbxj3")
+name = "Guardian Serpent"
+maxHp = 100
+speed = 80.0

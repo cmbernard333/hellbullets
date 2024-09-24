@@ -16,6 +16,10 @@ run/main_scene="res://Scenes/world.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://BolcaCanon.png"
 
+[autoload]
+
+SpriteUtils="*res://Scripts/SpriteUtils.gd"
+
 [display]
 
 window/stretch/mode="canvas_items"
