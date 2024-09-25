@@ -1,12 +1,19 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3gkrlrxpecoj"]
+[gd_scene load_steps=9 format=3 uid="uid://b3gkrlrxpecoj"]
 
 [ext_resource type="Script" path="res://Scripts/enemy.gd" id="1_6dxx0"]
 [ext_resource type="Texture2D" uid="uid://c7dqtlb7a01mw" path="res://Resources/Bullet-Hell-Assets/monster sprites/guardian_serpent_old.png" id="2_rh7fr"]
 [ext_resource type="Resource" uid="uid://bs6chxa2pgtt7" path="res://Resources/Types/guardian_serpent_old.tres" id="2_rm107"]
 [ext_resource type="Texture2D" uid="uid://dvxotggdmtdxc" path="res://Resources/Free Assets/pixelart_skull.png" id="4_wl5rt"]
+[ext_resource type="Script" path="res://Scenes/progress_bar.gd" id="5_8bxhg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_441mw"]
 size = Vector2(31, 31)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iutbu"]
+bg_color = Color(1, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g0pu8"]
+bg_color = Color(0, 1, 0, 1)
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -26,3 +33,14 @@ visible = false
 position = Vector2(13.3125, -13.3125)
 scale = Vector2(0.00903321, 0.010498)
 texture = ExtResource("4_wl5rt")
+
+[node name="ProgressBar" type="ProgressBar" parent="."]
+offset_left = -15.0
+offset_top = -26.0
+offset_right = 16.0
+offset_bottom = -18.0
+theme_override_styles/background = SubResource("StyleBoxFlat_iutbu")
+theme_override_styles/fill = SubResource("StyleBoxFlat_g0pu8")
+max_value = 1.0
+show_percentage = false
+script = ExtResource("5_8bxhg")

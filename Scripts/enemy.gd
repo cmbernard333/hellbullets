@@ -7,6 +7,7 @@ class_name Enemy
 
 @onready var deathMarker: Sprite2D = get_node("DeathMarker")
 @onready var collisionShape: CollisionShape2D = get_node("CollisionShape2D")
+@onready var progressBar: ProgressBar = get_node("ProgressBar")
 
 var direction: Vector2
 var is_alive: bool
@@ -23,13 +24,15 @@ func _die():
 
 func live():
 	self.currentHp = enemyType.maxHp
+	progressBar.on_health_update.emit(currentHp, enemyType.maxHp)
 	self.is_alive = true
 	deathMarker.visible = false
 	collisionShape.disabled = false
 
 func take_damage(damage: int):
 	print('Enemy ', self.get_instance_id(), ' took ', damage, ' damage')
-	currentHp = min(0, currentHp - damage)
+	currentHp = max(0, currentHp - damage)
+	progressBar.on_health_update.emit(currentHp, enemyType.maxHp)
 	if currentHp == 0:
 		if pool == null:
 			queue_free.call_deferred()

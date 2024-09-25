@@ -15,9 +15,20 @@ var pool: Array[Enemy] = []
 # enemy_killed is the signal to say the enemy can be reset
 signal enemy_killed(enemy: Enemy)
 
-# when a enemy signals it has finished
-func _on_enemy_done(enemy: Enemy):
-	reset_enemy(enemy)
+# check if we have any unused enemies; otherwise create a new one (grows to infinity)
+func get_enemy() -> Enemy:
+	for enemy in pool:
+		if not enemy.is_alive:
+			return enemy
+	return null
+
+func init() -> void:
+	for i in range(poolSize):
+		_add_enemy_to_pool()
+	
+func reset_enemy(enemy: Enemy) -> void:
+	enemy.visible = false
+	enemy.global_position = spawn.global_position
 
 # add a new enemy to the pool
 func _add_enemy_to_pool() -> Enemy:
@@ -30,31 +41,24 @@ func _add_enemy_to_pool() -> Enemy:
 	pool.append(newEnemy)
 	add_child(newEnemy) # note this calls _ready()
 	return newEnemy
-
-# check if we have any unused enemies; otherwise create a new one (grows to infinity)
-func get_enemy() -> Enemy:
-	for enemy in pool:
-		if not enemy.is_alive:
-			return enemy
-	return null
 	
-func reset_enemy(enemy: Enemy) -> void:
-	enemy.visible = false
-	enemy.global_position = spawn.global_position
-	
-func _spawn_enemy() -> void:
-	var enemy = get_enemy()
-	print("Spawning enemy...")
-	if enemy != null:
-		enemy.global_position = spawn.global_position
-		enemy.live()
-		enemy.show()
-
-func init() -> void:
-	for i in range(poolSize):
-		_add_enemy_to_pool()
+# when a enemy signals it has finished
+func _on_enemy_done(enemy: Enemy):
+	reset_enemy(enemy)
 
 func _ready() -> void:
 	enemy_killed.connect(_on_enemy_done)
 	init()
 	timer.start()
+
+func _random_position() -> Vector2:
+	return Vector2(randi_range(-50, 50), randi_range(-50, 50))
+
+# after the timer times out, it calls this function
+func _spawn_enemy() -> void:
+	var enemy = get_enemy()
+	print("Spawning enemy...")
+	if enemy != null:
+		enemy.global_position = spawn.global_position + _random_position()
+		enemy.live()
+		enemy.show()

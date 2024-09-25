@@ -8,3 +8,4 @@ class_name EnemyType
 @export var name: String
 @export var maxHp: int
 @export var speed: float = 80.0
+@export var fireRate: float = 1.0

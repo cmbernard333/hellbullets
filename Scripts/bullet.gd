@@ -2,6 +2,8 @@ extends CharacterBody2D
 
 class_name Bullet
 
+@export var bulletDamage: int = 25
+
 var pool: BulletPool
 
 func _reset():
@@ -27,5 +29,5 @@ func _on_collider_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Enemy"):
 		if self.visible and body.is_alive and body.visible:
 			print('Bullet hit enemy')
-			body.take_damage(100)
+			body.take_damage(bulletDamage)
 			self._reset()
