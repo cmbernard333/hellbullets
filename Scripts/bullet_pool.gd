@@ -4,7 +4,7 @@ class_name BulletPool
 
 var bulletScene: PackedScene = preload("res://Scenes/bullet.tscn")
 var poolSize: int = 20
-var bulletPool: Array[Bullet] = []
+var pool: Array[Bullet] = []
 
 # bullet_done is the signal to say the bullet can be reset
 signal bullet_done(bullet: Bullet)
@@ -16,16 +16,16 @@ func _on_bullet_done(bullet: Bullet):
 # add a new bullet to the pool
 func _add_bullet_to_pool() -> Bullet:
 	var newBullet: Bullet = bulletScene.instantiate()
-	newBullet.bulletPool = self # set the bullet pool creator
-	newBullet.hide()
-	add_to_group("Bullet", true)
-	bulletPool.append(newBullet)
+	newBullet.pool = self # set the bullet pool creator
+	# newBullet.hide()
+	# newBullet.add_to_group("Bullet", true)
+	pool.append(newBullet)
 	add_child(newBullet)
 	return newBullet
 
 # check if we have any unused bullets; otherwise create a new one (grows to infinity)
 func get_bullet() -> Bullet:
-	for bullet in bulletPool:
+	for bullet in pool:
 		if not bullet.visible:
 			return bullet
 			
@@ -33,8 +33,8 @@ func get_bullet() -> Bullet:
 	return newBullet
 	
 func reset_bullet(bullet: Bullet) -> void:
-	bullet.position = Vector2(-1000,-1000)
 	bullet.hide()
+	bullet.global_position = get_parent().global_position
 
 func _ready() -> void:
 	bullet_done.connect(_on_bullet_done)

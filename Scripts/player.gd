@@ -3,25 +3,30 @@ extends CharacterBody2D
 class_name PlayerCharacter
 
 @export var speed: float = 75.0
-@onready var bulletPool: BulletPool = get_node("Bullets")
-@onready var bullets = get_node("Bullets")
-@onready var bulletSpawn = get_node("BulletSpawn")
+# @onready var bulletPool: BulletPool = get_node("Bullets")
+@onready var bulletScene: PackedScene = preload("res://Scenes/bullet.tscn")
+@onready var bullets = get_node("BulletReset/Bullets")
+@onready var bulletSpawn = get_node("BulletReset/BulletSpawn")
 
 # the direction we are facing
 var direction: Vector2 = Vector2(0, 1)
+
+func _get_bullet() -> Bullet:
+	return bulletScene.instantiate()
 		
-func _shoot_bullet(playerDir: Vector2, bulletSpeed: float = 100) -> void:
+func _shoot_bullet(playerDir: Vector2, bulletSpeed: float = 120) -> void:
 	if Input.is_action_just_pressed("shoot"):
-		var bullet: Bullet = bulletPool.get_bullet()
+		var bullet: Bullet = _get_bullet()
 		bullet.global_position = bulletSpawn.global_position
 		bullet.velocity = playerDir * bulletSpeed
+		bullets.add_child(bullet)
 		bullet.show()
 
 # process physics between frames; delta is the time between the last frame
 func _physics_process(delta: float) -> void:
 	var inputDirection: Vector2 = Vector2(
-	Input.get_axis("ui_left", "ui_right"),
-	Input.get_axis("ui_up", "ui_down")
+	Input.get_axis("MoveLeft", "MoveRight"),
+	Input.get_axis("MoveUp", "MoveDown")
 	).normalized()
 	
 	# setup the animation frame

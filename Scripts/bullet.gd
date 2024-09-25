@@ -2,15 +2,21 @@ extends CharacterBody2D
 
 class_name Bullet
 
-var bulletPool: BulletPool
+var pool: BulletPool
+
+func _reset():
+	if pool != null:
+		pool.reset_bullet(self)
+	else:
+		self.queue_free.call_deferred()
 
 func _init(assignedBulletPool: BulletPool = null):
 	if assignedBulletPool != null:
-		bulletPool = assignedBulletPool
+		self.pool = assignedBulletPool
 
 # if the bullet leaves the screen or collides with an enemy
 func _bullet_done():
-	bulletPool.emit(self)
+	pool.emit(self)
 
 func _process(delta: float) -> void:
 	self.rotation += 0.5
@@ -19,5 +25,7 @@ func _process(delta: float) -> void:
 # when something hits the area2d associated with this bullet
 func _on_collider_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Enemy"):
-		body.on_hit.emit(100)
-		bulletPool.reset_bullet(self)
+		if self.visible and body.is_alive and body.visible:
+			print('Bullet hit enemy')
+			body.take_damage(100)
+			self._reset()

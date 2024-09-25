@@ -4,10 +4,10 @@
 [ext_resource type="Script" path="res://Scripts/bullet.gd" id="1_pm1wy"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_5ea1w"]
-radius = 12.0416
+radius = 11.0454
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_kuads"]
-radius = 12.0416
+radius = 14.0
 
 [node name="Bullet" type="CharacterBody2D"]
 collision_layer = 0
@@ -22,8 +22,10 @@ texture = ExtResource("1_30rxu")
 shape = SubResource("CircleShape2D_5ea1w")
 
 [node name="Collider" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Collider"]
+[node name="ColliderShape" type="CollisionShape2D" parent="Collider"]
 shape = SubResource("CircleShape2D_kuads")
 
 [connection signal="body_entered" from="Collider" to="." method="_on_collider_body_entered"]
