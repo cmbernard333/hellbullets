@@ -43,11 +43,12 @@ func take_damage(damage: int):
 	if currentHp == 0:
 		self.die()
 			
+# getting hit by things (mostly bullets)
 func _on_hit(damage: int):
 	take_damage(damage)
 
+# colliding with the player
 func _on_collider_body_entered(body: Node2D) -> void:
-	print('Body global position',body.global_position,' Collider global position ', global_position)
 	if body.is_in_group("Player"):
 		body.take_damage(1)
 

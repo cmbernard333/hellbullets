@@ -1,5 +1,6 @@
-[gd_scene load_steps=24 format=4 uid="uid://dxhp5nqxf1h3p"]
+[gd_scene load_steps=26 format=4 uid="uid://dxhp5nqxf1h3p"]
 
+[ext_resource type="Script" path="res://Scripts/world.gd" id="1_1bkt5"]
 [ext_resource type="Texture2D" uid="uid://bk8lg6woc354g" path="res://Resources/Bullet-Hell-Assets/floor tiles/cobble_blood_1_old.png" id="1_y6w5j"]
 [ext_resource type="Texture2D" uid="uid://ccchhgvs3giy3" path="res://Resources/Bullet-Hell-Assets/floor tiles/cobble_blood_2_old.png" id="2_aajyl"]
 [ext_resource type="Texture2D" uid="uid://dmunxmwubpjue" path="res://Resources/Bullet-Hell-Assets/floor tiles/cobble_blood_3_new.png" id="3_03a76"]
@@ -321,7 +322,12 @@ sources/7 = SubResource("TileSetAtlasSource_4vcd7")
 sources/8 = SubResource("TileSetAtlasSource_tkkkr")
 sources/9 = SubResource("TileSetAtlasSource_33opg")
 
+[sub_resource type="LabelSettings" id="LabelSettings_e5ty2"]
+font_size = 32
+outline_size = 2
+
 [node name="World" type="Node2D"]
+script = ExtResource("1_1bkt5")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(224, 160)
@@ -350,5 +356,14 @@ position_smoothing_enabled = true
 position = Vector2(83, 129)
 player = NodePath("../Player")
 poolSize = 5
+
+[node name="WorldUI" type="CanvasLayer" parent="."]
+
+[node name="Label" type="Label" parent="WorldUI"]
+offset_left = 872.0
+offset_right = 1010.0
+offset_bottom = 45.0
+text = "Health: 3"
+label_settings = SubResource("LabelSettings_e5ty2")
 
 [editable path="Player"]

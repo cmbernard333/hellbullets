@@ -76,3 +76,5 @@ visible = false
 sprite_frames = SubResource("SpriteFrames_k7kge")
 animation = &"death"
 frame = 1
+
+[connection signal="body_entered" from="Collider" to="." method="_on_collider_body_entered"]
