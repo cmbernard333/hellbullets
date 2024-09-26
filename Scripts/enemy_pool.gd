@@ -5,7 +5,6 @@ class_name EnemyPool
 @export var player: PlayerCharacter
 
 @onready var timer: Timer = get_node("Timer")
-@onready var spawn: Marker2D = get_node("Spawn")
 @export var poolSize: int = 20
 
 var enemyScene: PackedScene = preload("res://Scenes/enemy.tscn")
@@ -27,27 +26,21 @@ func init() -> void:
 		_add_enemy_to_pool()
 	
 func reset_enemy(enemy: Enemy) -> void:
-	enemy.visible = false
-	enemy.global_position = spawn.global_position
+	enemy.global_position = Vector2(-1000,-1000)
 
 # add a new enemy to the pool
 func _add_enemy_to_pool() -> Enemy:
-	var newEnemy: Enemy = enemyScene.instantiate()
-	newEnemy.hide()
-	newEnemy.pool = self # set the enemy pool creator
-	newEnemy.is_alive = false # have to set to alive; otherwise we can't get one
-	newEnemy.player = player
-	newEnemy.add_to_group("Enemy", true)
-	pool.append(newEnemy)
-	add_child(newEnemy) # note this calls _ready()
-	return newEnemy
-	
-# when a enemy signals it has finished
-func _on_enemy_done(enemy: Enemy):
-	reset_enemy(enemy)
+	var enemy: Enemy = enemyScene.instantiate()
+	enemy.hide()
+	enemy.pool = self # set the enemy pool creator
+	enemy.is_alive = false # have to set to alive; otherwise we can't get one
+	enemy.player = player
+	enemy.add_to_group("Enemy", true)
+	pool.append(enemy)
+	add_child(enemy) # note this calls _ready()
+	return enemy
 
 func _ready() -> void:
-	enemy_killed.connect(_on_enemy_done)
 	init()
 	timer.start()
 
@@ -57,8 +50,7 @@ func _random_position() -> Vector2:
 # after the timer times out, it calls this function
 func _spawn_enemy() -> void:
 	var enemy = get_enemy()
-	print("Spawning enemy...")
 	if enemy != null:
-		enemy.global_position = spawn.global_position + _random_position()
+		enemy.global_position = self.global_position + _random_position()
 		enemy.live()
-		enemy.show()
+		assert(enemy.progressBar.value == 1, "Enemy health must be max!")

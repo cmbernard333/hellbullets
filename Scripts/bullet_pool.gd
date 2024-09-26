@@ -17,8 +17,8 @@ func _on_bullet_done(bullet: Bullet):
 func _add_bullet_to_pool() -> Bullet:
 	var newBullet: Bullet = bulletScene.instantiate()
 	newBullet.pool = self # set the bullet pool creator
-	# newBullet.hide()
-	# newBullet.add_to_group("Bullet", true)
+	newBullet.hide()
+	newBullet.add_to_group("Bullet", true)
 	pool.append(newBullet)
 	add_child(newBullet)
 	return newBullet
@@ -34,9 +34,10 @@ func get_bullet() -> Bullet:
 	
 func reset_bullet(bullet: Bullet) -> void:
 	bullet.hide()
+	bullet.velocity = Vector2(0, 0)
 	bullet.global_position = get_parent().global_position
 
 func _ready() -> void:
 	bullet_done.connect(_on_bullet_done)
 	for i in range(poolSize):
-		var bullet: Bullet = _add_bullet_to_pool()
+		_add_bullet_to_pool()

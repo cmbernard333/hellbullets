@@ -2,24 +2,26 @@ extends CharacterBody2D
 
 class_name PlayerCharacter
 
-@export var speed: float = 75.0
-# @onready var bulletPool: BulletPool = get_node("Bullets")
-@onready var bulletScene: PackedScene = preload("res://Scenes/bullet.tscn")
-@onready var bullets = get_node("BulletReset/Bullets")
-@onready var bulletSpawn = get_node("BulletReset/BulletSpawn")
+@export var maxHp: int = 3
+@export var speed: int = 120
+@onready var anim: AnimatedSprite2D = get_node("AnimatedSprite2D")
+@onready var bulletPool = get_node("BulletPool/Bullets")
+@onready var bulletSpawn = get_node("BulletPool/BulletSpawn")
 
+# current health
+var currHp: int
 # the direction we are facing
 var direction: Vector2 = Vector2(0, 1)
 
-func _get_bullet() -> Bullet:
-	return bulletScene.instantiate()
+func take_damage(damage: int):
+	currHp = max(0, currHp - damage)
 		
 func _shoot_bullet(playerDir: Vector2, bulletSpeed: float = 120) -> void:
 	if Input.is_action_just_pressed("shoot"):
-		var bullet: Bullet = _get_bullet()
+		var bullet: Bullet = bulletPool.get_bullet()
+		bullet.collider.disabled = false
 		bullet.global_position = bulletSpawn.global_position
 		bullet.velocity = playerDir * bulletSpeed
-		bullets.add_child(bullet)
 		bullet.show()
 
 # process physics between frames; delta is the time between the last frame
@@ -46,3 +48,14 @@ func _physics_process(delta: float) -> void:
 	
 	velocity = inputDirection * speed
 	move_and_slide()
+	
+	if currHp == 0:
+		var sprite: Sprite2D = get_node("Sprite")
+		sprite.hide()
+		anim.show()
+		anim.play("death")
+		await anim.animation_finished
+		queue_free()
+
+func _ready():
+	currHp = maxHp

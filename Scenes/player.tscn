@@ -1,12 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://dmq2aisvbqwft"]
+[gd_scene load_steps=10 format=3 uid="uid://dmq2aisvbqwft"]
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_rx7i3"]
 [ext_resource type="Texture2D" uid="uid://dpm1v18j7fw1k" path="res://Resources/Bullet-Hell-Assets/player.png" id="2_vinv0"]
+[ext_resource type="Texture2D" uid="uid://4sqaebba4te6" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_0.png" id="3_6pmgr"]
+[ext_resource type="Script" path="res://Scripts/bullet_pool.gd" id="3_ldk2t"]
+[ext_resource type="Texture2D" uid="uid://cvg6pch8265n2" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_1.png" id="4_pilww"]
+[ext_resource type="Texture2D" uid="uid://plk5ruxrr6dt" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_2.png" id="5_7y475"]
+[ext_resource type="Texture2D" uid="uid://djoci04hr1qe5" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_3.png" id="6_cedam"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_031ew"]
 radius = 14.0
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_aeo1w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_6pmgr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_pilww")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7y475")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_cedam")
+}],
+"loop": false,
+"name": &"death",
+"speed": 5.0
+}]
+
 [node name="Player" type="CharacterBody2D"]
+collision_mask = 0
 script = ExtResource("1_rx7i3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -19,9 +45,17 @@ hframes = 3
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="."]
 
-[node name="BulletReset" type="Marker2D" parent="."]
+[node name="BulletPool" type="Marker2D" parent="."]
 
-[node name="Bullets" type="Node" parent="BulletReset"]
+[node name="Bullets" type="Node" parent="BulletPool"]
+script = ExtResource("3_ldk2t")
 
-[node name="BulletSpawn" type="Marker2D" parent="BulletReset"]
+[node name="BulletSpawn" type="Marker2D" parent="BulletPool"]
 position = Vector2(0, 16)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_aeo1w")
+animation = &"death"
+frame = 3
+frame_progress = 1.0

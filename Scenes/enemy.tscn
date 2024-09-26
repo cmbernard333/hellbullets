@@ -1,10 +1,13 @@
-[gd_scene load_steps=9 format=3 uid="uid://b3gkrlrxpecoj"]
+[gd_scene load_steps=14 format=3 uid="uid://b3gkrlrxpecoj"]
 
 [ext_resource type="Script" path="res://Scripts/enemy.gd" id="1_6dxx0"]
 [ext_resource type="Texture2D" uid="uid://c7dqtlb7a01mw" path="res://Resources/Bullet-Hell-Assets/monster sprites/guardian_serpent_old.png" id="2_rh7fr"]
 [ext_resource type="Resource" uid="uid://bs6chxa2pgtt7" path="res://Resources/Types/guardian_serpent_old.tres" id="2_rm107"]
-[ext_resource type="Texture2D" uid="uid://dvxotggdmtdxc" path="res://Resources/Free Assets/pixelart_skull.png" id="4_wl5rt"]
-[ext_resource type="Script" path="res://Scenes/progress_bar.gd" id="5_8bxhg"]
+[ext_resource type="Script" path="res://Scripts/progress_bar.gd" id="5_8bxhg"]
+[ext_resource type="Texture2D" uid="uid://4sqaebba4te6" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_0.png" id="6_vdiar"]
+[ext_resource type="Texture2D" uid="uid://cvg6pch8265n2" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_1.png" id="7_6hbtq"]
+[ext_resource type="Texture2D" uid="uid://plk5ruxrr6dt" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_2.png" id="8_xncwd"]
+[ext_resource type="Texture2D" uid="uid://djoci04hr1qe5" path="res://Resources/Bullet-Hell-Assets/enemy death animation/enemy_death_3.png" id="9_7t6cm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_441mw"]
 size = Vector2(31, 31)
@@ -14,6 +17,29 @@ bg_color = Color(1, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g0pu8"]
 bg_color = Color(0, 1, 0, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pw0e6"]
+size = Vector2(29, 29)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_k7kge"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_vdiar")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_6hbtq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_xncwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_7t6cm")
+}],
+"loop": false,
+"name": &"death",
+"speed": 5.0
+}]
 
 [node name="Enemy" type="CharacterBody2D"]
 collision_layer = 2
@@ -28,12 +54,6 @@ texture = ExtResource("2_rh7fr")
 position = Vector2(0.5, -0.5)
 shape = SubResource("RectangleShape2D_441mw")
 
-[node name="DeathMarker" type="Sprite2D" parent="."]
-visible = false
-position = Vector2(13.3125, -13.3125)
-scale = Vector2(0.00903321, 0.010498)
-texture = ExtResource("4_wl5rt")
-
 [node name="ProgressBar" type="ProgressBar" parent="."]
 offset_left = -15.0
 offset_top = -26.0
@@ -44,3 +64,15 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_g0pu8")
 max_value = 1.0
 show_percentage = false
 script = ExtResource("5_8bxhg")
+
+[node name="Collider" type="Area2D" parent="."]
+
+[node name="ColliderShape" type="CollisionShape2D" parent="Collider"]
+position = Vector2(0.5, -0.5)
+shape = SubResource("RectangleShape2D_pw0e6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_k7kge")
+animation = &"death"
+frame = 1

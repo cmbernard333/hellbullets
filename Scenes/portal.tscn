@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b48kobshqno1s"]
+[gd_scene load_steps=3 format=3 uid="uid://px40fv0j6sio"]
 
 [ext_resource type="Script" path="res://Scripts/enemy_pool.gd" id="1_pml5w"]
 [ext_resource type="Texture2D" uid="uid://bk12l4tu4alv4" path="res://Resources/Bullet-Hell-Assets/spawner.png" id="2_shuwf"]
@@ -7,12 +7,8 @@
 script = ExtResource("1_pml5w")
 
 [node name="Sprite" type="Sprite2D" parent="."]
-position = Vector2(-4, 186)
 texture = ExtResource("2_shuwf")
 
 [node name="Timer" type="Timer" parent="."]
-
-[node name="Spawn" type="Marker2D" parent="."]
-position = Vector2(-4, 187)
 
 [connection signal="timeout" from="Timer" to="." method="_spawn_enemy"]
