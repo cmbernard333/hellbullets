@@ -17,7 +17,7 @@ signal enemy_killed(enemy: Enemy)
 # check if we have any unused enemies; otherwise create a new one (grows to infinity)
 func get_enemy() -> Enemy:
 	for enemy in pool:
-		if not enemy.is_alive:
+		if enemy.state == enemy.State.INACTIVE:
 			return enemy
 	return null
 
@@ -26,14 +26,15 @@ func init() -> void:
 		_add_enemy_to_pool()
 	
 func reset_enemy(enemy: Enemy) -> void:
-	enemy.global_position = Vector2(-1000,-1000)
+	enemy.state = enemy.State.INACTIVE
+	enemy.global_position = Vector2(-1000, -1000)
 
 # add a new enemy to the pool
 func _add_enemy_to_pool() -> Enemy:
 	var enemy: Enemy = enemyScene.instantiate()
 	enemy.hide()
 	enemy.pool = self # set the enemy pool creator
-	enemy.is_alive = false # have to set to alive; otherwise we can't get one
+	enemy.state = enemy.State.INACTIVE
 	enemy.player = player
 	enemy.add_to_group("Enemy", true)
 	pool.append(enemy)

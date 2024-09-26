@@ -17,15 +17,15 @@ var pool: EnemyPool
 
 signal on_hit(damage: int)
 
+enum State {ALIVE, DYING, INACTIVE}
+
+var state: State = State.ALIVE
+
 # disabling an enemy effectively makes them dead, but is useful for pooling.
 func die():
-	print('Enemy died')
-	self.is_alive = false
+	self.state = State.DYING
 	velocity = Vector2.ZERO
-	sprite.hide()
-	progressBar.hide()
-	anim.show()
-	pool.reset_enemy(self)
+	collisionShape.set_deferred("disabled", true)
 
 func live():
 	self.currentHp = enemyType.maxHp
@@ -34,8 +34,8 @@ func live():
 	sprite.show()
 	progressBar.show()
 	anim.hide()
-	self.is_alive = true
-	visible = true
+	self.state = State.ALIVE
+	self.visible = true
 
 func take_damage(damage: int):
 	currentHp = max(0, currentHp - damage)
@@ -62,7 +62,7 @@ func _ready() -> void:
 		collisionShape.disabled = true
 
 func _physics_process(delta: float) -> void:
-	if is_alive and player != null:
+	if state == State.ALIVE and player != null:
 		collisionShape.disabled = false
 		direction = (player.global_position - self.global_position).normalized()
 		
@@ -71,10 +71,12 @@ func _physics_process(delta: float) -> void:
 		velocity = enemyType.speed * direction
 		move_and_slide()
 	
-	if !is_alive and currentHp == 0:
-		collisionShape.disabled = true
+	if state == State.DYING:
+		sprite.hide()
+		progressBar.hide()
+		anim.show()
 		anim.play("death")
 		await anim.animation_finished
 		anim.hide()
-			
+		pool.reset_enemy(self)
 		

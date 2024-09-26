@@ -21,7 +21,8 @@ func _process(delta: float) -> void:
 # when something hits the area2d associated with this bullet
 func _on_collider_body_entered(body: Node2D) -> void:
 	if body.is_in_group("Enemy"):
-		if self.visible and body.is_alive and body.visible:
+		var enemy = body as Enemy
+		if self.visible and enemy.state == enemy.State.ALIVE:
 			print("Bullet hit enemy")
 			self._reset()
 			body.take_damage(bulletDamage)
